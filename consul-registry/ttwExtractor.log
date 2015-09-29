@@ -1,0 +1,12 @@
+22:19:44,363 INFO  [DefaultHttpClient:656] I/O exception (java.net.SocketException) caught when connecting to the target host: Network is unreachable
+22:19:44,365 INFO  [DefaultHttpClient:662] Retrying connect
+22:21:34,425 INFO  [DefaultHttpClient:656] I/O exception (java.net.SocketException) caught when connecting to the target host: Network is unreachable
+22:21:34,428 INFO  [DefaultHttpClient:662] Retrying connect
+22:22:49,538 INFO  [DefaultHttpClient:656] I/O exception (java.net.SocketException) caught when connecting to the target host: Network is unreachable
+22:22:49,539 INFO  [DefaultHttpClient:662] Retrying connect
+22:23:24,587 INFO  [DefaultHttpClient:656] I/O exception (java.net.SocketException) caught when connecting to the target host: Network is unreachable
+22:23:24,588 INFO  [DefaultHttpClient:662] Retrying connect
+22:25:13,200 INFO  [DefaultHttpClient:656] I/O exception (java.net.SocketException) caught when connecting to the target host: Network is unreachable
+22:25:13,202 INFO  [DefaultHttpClient:662] Retrying connect
+22:25:48,260 INFO  [DefaultHttpClient:656] I/O exception (java.net.SocketException) caught when connecting to the target host: Network is unreachable
+22:25:48,261 INFO  [DefaultHttpClient:662] Retrying connect
