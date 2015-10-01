@@ -85,4 +85,8 @@
       </plugin>
 		</plugins>
 	</build>
+	<scm>
+		<url>https://github.com/bprager/camel-consul.git</url>
+		<developerConnection>Bernd Prager</developerConnection>
+	</scm>
 </project>
