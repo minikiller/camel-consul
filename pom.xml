@@ -4,10 +4,18 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ws.prager.camel</groupId>
-	<artifactId>consul-registry-plugin</artifactId>
-	<name>consul-registry-plugin</name>
-	<version>1.0.1</version>
+	<artifactId>camel-consul</artifactId>
+	<name>camel-consul</name>
+	<version>1.1.0</version>
+	<description>Apache Came plugin for Consul registry</description>
 	<url>http://maven.apache.org</url>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -54,5 +62,4 @@
 			<version>1.7.12</version>
 		</dependency>
 	</dependencies>
-	
 </project>
