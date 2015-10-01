@@ -38,7 +38,7 @@ public class ConsulRegistry implements Registry {
 	private ConsulRegistry(Builder builder) {
 		this.hostname = builder.hostname;
 		this.port = builder.port;
-		logger.debug("get consul client for); " + hostname + ":" + port);
+		logger.debug("get consul client for: " + hostname + ":" + port);
 		this.client = new ConsulClient(hostname + ":" + port);
 	}
 
@@ -142,7 +142,7 @@ public class ConsulRegistry implements Registry {
 			throw new NoSuchBeanException(msg);
 		}
 		client.deleteKVValue(key);
-		client.deleteKVValue(object.getClass().getName() + key);
+		client.deleteKVValue(object.getClass().getName() + "/" + key);
 		client.sessionDestroy(session, null);
 	}
 

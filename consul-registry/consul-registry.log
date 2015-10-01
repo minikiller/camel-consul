@@ -1,0 +1,56 @@
+00:00:37,085 INFO  [DefaultCamelContext:2434] Apache Camel 2.15.3 (CamelContext: camel-1) is starting
+00:00:37,086 INFO  [ManagedManagementStrategy:187] JMX is enabled
+00:00:37,229 INFO  [DefaultTypeConverter:56] Loaded 182 type converters
+00:00:37,377 INFO  [DefaultCamelContext:2649] AllowUseOriginalMessage is enabled. If access to the original message is not needed, then its recommended to turn this option off as it may improve performance.
+00:00:37,377 INFO  [DefaultCamelContext:2659] StreamCaching is not in use. If using streams then its recommended to enable stream caching. See more details at http://camel.apache.org/stream-caching.html
+00:00:37,396 INFO  [DefaultCamelContext:3180] Route: route1 started and consuming from: Endpoint[direct://hello]
+00:00:37,397 INFO  [DefaultCamelContext:2469] Total 1 routes, of which 1 is started.
+00:00:37,398 INFO  [DefaultCamelContext:2470] Apache Camel 2.15.3 (CamelContext: camel-1) started in 0.314 seconds
+00:00:37,434 INFO  [DefaultCamelContext:2676] Apache Camel 2.15.3 (CamelContext: camel-1) is shutting down
+00:00:37,435 INFO  [DefaultShutdownStrategy:187] Starting to graceful shutdown 1 routes (timeout 300 seconds)
+00:00:37,441 INFO  [DefaultShutdownStrategy:665] Route: route1 shutdown complete, was consuming from: Endpoint[direct://hello]
+00:00:37,441 INFO  [DefaultShutdownStrategy:250] Graceful shutdown of 1 routes completed in 0 seconds
+00:00:37,444 INFO  [DefaultCamelContext:2761] Apache Camel 2.15.3 (CamelContext: camel-1) uptime 0.361 seconds
+00:00:37,444 INFO  [DefaultCamelContext:2762] Apache Camel 2.15.3 (CamelContext: camel-1) is shutdown in 0.010 seconds
+00:01:01,246 INFO  [DefaultCamelContext:2434] Apache Camel 2.15.3 (CamelContext: camel-1) is starting
+00:01:01,249 INFO  [ManagedManagementStrategy:187] JMX is enabled
+00:01:01,380 INFO  [DefaultTypeConverter:56] Loaded 182 type converters
+00:01:01,506 INFO  [DefaultCamelContext:2649] AllowUseOriginalMessage is enabled. If access to the original message is not needed, then its recommended to turn this option off as it may improve performance.
+00:01:01,506 INFO  [DefaultCamelContext:2659] StreamCaching is not in use. If using streams then its recommended to enable stream caching. See more details at http://camel.apache.org/stream-caching.html
+00:01:01,522 INFO  [DefaultCamelContext:3180] Route: route1 started and consuming from: Endpoint[direct://hello]
+00:01:01,523 INFO  [DefaultCamelContext:2469] Total 1 routes, of which 1 is started.
+00:01:01,524 INFO  [DefaultCamelContext:2470] Apache Camel 2.15.3 (CamelContext: camel-1) started in 0.278 seconds
+00:01:01,557 INFO  [DefaultCamelContext:2676] Apache Camel 2.15.3 (CamelContext: camel-1) is shutting down
+00:01:01,558 INFO  [DefaultShutdownStrategy:187] Starting to graceful shutdown 1 routes (timeout 300 seconds)
+00:01:01,562 INFO  [DefaultShutdownStrategy:665] Route: route1 shutdown complete, was consuming from: Endpoint[direct://hello]
+00:01:01,563 INFO  [DefaultShutdownStrategy:250] Graceful shutdown of 1 routes completed in 0 seconds
+00:01:01,565 INFO  [DefaultCamelContext:2761] Apache Camel 2.15.3 (CamelContext: camel-1) uptime 0.320 seconds
+00:01:01,566 INFO  [DefaultCamelContext:2762] Apache Camel 2.15.3 (CamelContext: camel-1) is shutdown in 0.008 seconds
+00:03:17,472 INFO  [DefaultCamelContext:2434] Apache Camel 2.15.3 (CamelContext: camel-1) is starting
+00:03:17,475 INFO  [ManagedManagementStrategy:187] JMX is enabled
+00:03:17,605 INFO  [DefaultTypeConverter:56] Loaded 182 type converters
+00:03:17,728 INFO  [DefaultCamelContext:2649] AllowUseOriginalMessage is enabled. If access to the original message is not needed, then its recommended to turn this option off as it may improve performance.
+00:03:17,728 INFO  [DefaultCamelContext:2659] StreamCaching is not in use. If using streams then its recommended to enable stream caching. See more details at http://camel.apache.org/stream-caching.html
+00:03:17,746 INFO  [DefaultCamelContext:3180] Route: route1 started and consuming from: Endpoint[direct://hello]
+00:03:17,746 INFO  [DefaultCamelContext:2469] Total 1 routes, of which 1 is started.
+00:03:17,747 INFO  [DefaultCamelContext:2470] Apache Camel 2.15.3 (CamelContext: camel-1) started in 0.275 seconds
+00:03:17,779 INFO  [DefaultCamelContext:2676] Apache Camel 2.15.3 (CamelContext: camel-1) is shutting down
+00:03:17,780 INFO  [DefaultShutdownStrategy:187] Starting to graceful shutdown 1 routes (timeout 300 seconds)
+00:03:17,785 INFO  [DefaultShutdownStrategy:665] Route: route1 shutdown complete, was consuming from: Endpoint[direct://hello]
+00:03:17,785 INFO  [DefaultShutdownStrategy:250] Graceful shutdown of 1 routes completed in 0 seconds
+00:03:17,788 INFO  [DefaultCamelContext:2761] Apache Camel 2.15.3 (CamelContext: camel-1) uptime 0.317 seconds
+00:03:17,788 INFO  [DefaultCamelContext:2762] Apache Camel 2.15.3 (CamelContext: camel-1) is shutdown in 0.009 seconds
+00:03:39,616 INFO  [DefaultCamelContext:2434] Apache Camel 2.15.3 (CamelContext: camel-1) is starting
+00:03:39,619 INFO  [ManagedManagementStrategy:187] JMX is enabled
+00:03:39,766 INFO  [DefaultTypeConverter:56] Loaded 182 type converters
+00:03:39,898 INFO  [DefaultCamelContext:2649] AllowUseOriginalMessage is enabled. If access to the original message is not needed, then its recommended to turn this option off as it may improve performance.
+00:03:39,898 INFO  [DefaultCamelContext:2659] StreamCaching is not in use. If using streams then its recommended to enable stream caching. See more details at http://camel.apache.org/stream-caching.html
+00:03:39,916 INFO  [DefaultCamelContext:3180] Route: route1 started and consuming from: Endpoint[direct://hello]
+00:03:39,917 INFO  [DefaultCamelContext:2469] Total 1 routes, of which 1 is started.
+00:03:39,918 INFO  [DefaultCamelContext:2470] Apache Camel 2.15.3 (CamelContext: camel-1) started in 0.301 seconds
+00:03:39,950 INFO  [DefaultCamelContext:2676] Apache Camel 2.15.3 (CamelContext: camel-1) is shutting down
+00:03:39,950 INFO  [DefaultShutdownStrategy:187] Starting to graceful shutdown 1 routes (timeout 300 seconds)
+00:03:39,955 INFO  [DefaultShutdownStrategy:665] Route: route1 shutdown complete, was consuming from: Endpoint[direct://hello]
+00:03:39,955 INFO  [DefaultShutdownStrategy:250] Graceful shutdown of 1 routes completed in 0 seconds
+00:03:39,960 INFO  [DefaultCamelContext:2761] Apache Camel 2.15.3 (CamelContext: camel-1) uptime 0.345 seconds
+00:03:39,960 INFO  [DefaultCamelContext:2762] Apache Camel 2.15.3 (CamelContext: camel-1) is shutdown in 0.010 seconds

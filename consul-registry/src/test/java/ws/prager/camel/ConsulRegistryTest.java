@@ -1,23 +1,39 @@
 package ws.prager.camel;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.camel.NoSuchBeanException;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import junit.framework.TestCase;
-
 /**
+ * 
+ * @author Bernd Prager 
  * Unit test for Camel Registry implementation for Consul
  */
-public class ConsulRegistryTest extends TestCase implements Serializable {
+public class ConsulRegistryTest implements Serializable {
 
 	private static final long serialVersionUID = -3482971969351609265L;
-	static ConsulRegistry registry;
+	private static ConsulRegistry registry;
 
-	@Override
-	public void setUp() {
+	public class ConsulTestClass implements Serializable {
+		private static final long serialVersionUID = -4815945688487114891L;
+
+		public String hello(String name) {
+			return "Hello " + name;
+		}
+	}
+
+	@BeforeClass
+	public static void setUp() {
 		registry = new ConsulRegistry.Builder("192.168.99.100").build();
 	}
 
@@ -34,15 +50,8 @@ public class ConsulRegistryTest extends TestCase implements Serializable {
 		registry.put("stringTestKey", "stringValue");
 		String result = (String) registry.lookup("stringTestKey");
 		registry.remove("stringTestKey");
+		assertNotNull(result);
 		assertEquals("stringValue", result);
-	}
-	
-	@Test(expected = NoSuchBeanException.class)
-	public void removeString() {
-		registry.put("stringTestKey", "stringValue");
-		registry.remove("stringTestKey");
-		@SuppressWarnings("unused")
-		String result = (String) registry.lookup("stringTestKey");
 	}
 
 	@Test
@@ -51,94 +60,88 @@ public class ConsulRegistryTest extends TestCase implements Serializable {
 		registry.put("uniqueKey", "stringValueTwo");
 		String result = (String) registry.lookup("uniqueKey");
 		registry.remove("uniqueKey");
+		assertNotNull(result);
 		assertEquals("stringValueTwo", result);
 	}
 
 	@Test
-	public void testLookupByName() {
+	public void checkLookupByName() {
 		registry.put("namedKey", "namedValue");
 		String result = (String) registry.lookupByName("namedKey");
 		registry.remove("namedKey");
+		assertNotNull(result);
 		assertEquals("namedValue", result);
 	}
 
-	@Test(expected = NoSuchBeanException.class)
-	public void testFailedLookupByName() {
+	@Test
+	public void checkFailedLookupByName() {
 		registry.put("namedKey", "namedValue");
 		registry.remove("namedKey");
-		@SuppressWarnings("unused")
 		String result = (String) registry.lookupByName("namedKey");
-	}
-
-	public void testLookupByNameAndType() {
-
-	}
-
-	public void testFailedLookupByNameAndType() {
-
-	}
-
-	public void testFindByTypeWithName() {
-
-	}
-
-	public void testFailedFindByTypeWithName() {
-
-	}
-
-	public void testFindByType() {
-
-	}
-
-	public void testFailedFindByType() {
-
+		assertNull(result);
 	}
 
 	@Test
-	public void deleteString() {
-		registry.remove("stringTestKey");
-		assertNull(registry.lookup("stringTestKey"));
+	public void checkLookupByNameAndType() {
+		ConsulTestClass consulTestClass = new ConsulTestClass();
+		registry.put("testClass", consulTestClass);
+		ConsulTestClass consulTestClassClone = registry.lookupByNameAndType("testClass", consulTestClass.getClass());
+		registry.remove("testClass");
+		assertNotNull(consulTestClassClone);
+		assertEquals(consulTestClass.getClass(), consulTestClassClone.getClass());
+	}
+
+	@Test
+	public void checkFailedLookupByNameAndType() {
+		ConsulTestClass consulTestClass = new ConsulTestClass();
+		registry.put("testClass", consulTestClass);
+		registry.remove("testClass");
+		ConsulTestClass consulTestClassClone = registry.lookupByNameAndType("testClass", consulTestClass.getClass());
+		assertNull(consulTestClassClone);
+	}
+
+	@Test
+	public void checkFindByTypeWithName() {
+		ConsulTestClass consulTestClassOne = new ConsulTestClass();
+		ConsulTestClass consulTestClassTwo = new ConsulTestClass();
+		registry.put("testClassOne", consulTestClassOne);
+		registry.put("testClassTwo", consulTestClassTwo);
+		Map<String, ? extends ConsulTestClass> consulTestClassMap = registry
+				.findByTypeWithName(consulTestClassOne.getClass());
+		registry.remove("testClassOne");
+		registry.remove("testClassTwo");
+		HashMap<String, ConsulTestClass> hm = new HashMap<String, ConsulTestClass>();
+		assertNotNull(consulTestClassMap);
+		assertEquals(consulTestClassMap.getClass(), hm.getClass());
+		assertEquals(2, consulTestClassMap.size());
+	}
+
+	public void checkFailedFindByTypeWithName() {
+
 	}
 
 	@Test
 	public void storeObject() {
-
-		class TestClass implements Serializable {
-			private static final long serialVersionUID = 8859556554364125104L;
-
-			@Override
-			public String toString() {
-				return "hello";
-			}
-		}
-
-		TestClass testObject = new TestClass();
+		ConsulTestClass testObject = new ConsulTestClass();
 		registry.put("objectTestClass", testObject);
-		TestClass clone = (TestClass) registry.lookup("objectTestClass");
-		assertEquals(clone.toString(), "hello");
-
+		ConsulTestClass clone = (ConsulTestClass) registry.lookup("objectTestClass");
+		assertEquals(clone.hello("World"), "Hello World");
 		registry.remove("objectTestClass");
 	}
 
 	@Test
 	public void findByType() {
-
-		class ConsulTestClass implements Serializable {
-			private static final long serialVersionUID = 8859556554364125104L;
-		}
-
-		ConsulTestClass class1 = new ConsulTestClass();
-		registry.put("class1", class1);
-		ConsulTestClass class2 = new ConsulTestClass();
-		registry.put("class2", class2);
-
-		Set<? extends ConsulTestClass> results = registry.findByType(class1.getClass());
+		ConsulTestClass classOne = new ConsulTestClass();
+		registry.put("classOne", classOne);
+		ConsulTestClass classTwo = new ConsulTestClass();
+		registry.put("classTwo", classTwo);
+		Set<? extends ConsulTestClass> results = registry.findByType(classOne.getClass());
 		assertNotNull(results);
+		HashSet<ConsulTestClass> hashSet = new HashSet<ConsulTestClass>();
+		registry.remove("classOne");
+		registry.remove("classTwo");
+		assertEquals(results.getClass(), hashSet.getClass());
 		assertEquals(2, results.size());
-
-		registry.remove("class1");
-		registry.remove("class2");
-
 	}
 
 	public void notFindByType() {
