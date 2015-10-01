@@ -4,13 +4,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.camel.NoSuchBeanException;
+import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -23,6 +28,9 @@ public class ConsulRegistryTest implements Serializable {
 
 	private static final long serialVersionUID = -3482971969351609265L;
 	private static ConsulRegistry registry;
+	private static Properties prop;
+
+	private static final Logger logger = Logger.getLogger(ConsulRegistryTest.class);
 
 	public class ConsulTestClass implements Serializable {
 		private static final long serialVersionUID = -4815945688487114891L;
@@ -33,8 +41,25 @@ public class ConsulRegistryTest implements Serializable {
 	}
 
 	@BeforeClass
-	public static void setUp() {
-		registry = new ConsulRegistry.Builder("192.168.99.100").build();
+	public static void setUp() throws IOException {
+		// read the Consul host address from property file
+		prop = new Properties();
+		String propFileName = "/config.properties";
+		InputStream inputStream = null;;
+
+		try {
+			inputStream = ConsulRegistryTest.class.getResourceAsStream(propFileName);
+			if (inputStream != null) {
+				prop.load(inputStream);
+			} else {
+				throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
+			}
+		} catch (Exception e) {
+			logger.error("Exception: " + e);
+		} finally {
+			inputStream.close();
+		}
+		registry = new ConsulRegistry.Builder(prop.getProperty("consulHost")).build();
 	}
 
 	/**
@@ -42,7 +67,8 @@ public class ConsulRegistryTest implements Serializable {
 	 */
 	@Test
 	public void basics() {
-		assert(true);
+		logger.info("testing with consul host: " + prop.getProperty("consulHost"));
+		assertNotNull(prop.getProperty("consulHost"));
 	}
 
 	@Test

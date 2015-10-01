@@ -1,12 +1,16 @@
 package ws.prager.camel;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.util.Properties;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.test.junit4.CamelTestSupport;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 /**
@@ -18,6 +22,8 @@ import org.junit.Test;
 public class CamelRegistryTest extends CamelTestSupport implements Serializable {
 
 	private static final long serialVersionUID = 2503932166836068033L;
+	private static final Logger logger = Logger.getLogger(CamelRegistryTest.class);
+	private static Properties prop;
 	private CamelContext camelContext;
 	private ProducerTemplate producerTemplate;
 	private static ConsulRegistry consulRegistry;
@@ -32,8 +38,25 @@ public class CamelRegistryTest extends CamelTestSupport implements Serializable 
 	
 	@Override
 	public void setUp() throws Exception {
+		// read the Consul host address from property file
+		prop = new Properties();
+		String propFileName = "/config.properties";
+		InputStream inputStream = null;;
+
+		try {
+			inputStream = ConsulRegistryTest.class.getResourceAsStream(propFileName);
+			if (inputStream != null) {
+				prop.load(inputStream);
+			} else {
+				throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
+			}
+		} catch (Exception e) {
+			logger.error("Exception: " + e);
+		} finally {
+			inputStream.close();
+		}
 		// connect to Consul
-		consulRegistry = new ConsulRegistry.Builder("192.168.99.100").build();
+		consulRegistry = new ConsulRegistry.Builder(prop.getProperty("consulHost")).build();
 		// register our HelloBean under the name helloBean
 		consulRegistry.put("helloBean", new HelloBean());
 		// tell Camel to use our registry
