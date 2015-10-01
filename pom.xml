@@ -7,6 +7,16 @@
 	<artifactId>camel-consul</artifactId>
 	<name>camel-consul</name>
 	<version>1.1.0</version>
+	<developers>
+		<developer>
+			<id>bprager</id>
+			<name>Bernd Prager</name>
+			<email>bernd@prager.ws</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
 	<description>Apache Camel plugin for Consul registry</description>
 	<url>http://maven.apache.org</url>
 	<licenses>
@@ -86,16 +96,18 @@
 					<execution>
 						<id>sign-artifacts</id>
 						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.4</version>
 			</plugin>
 		</plugins>
 	</build>
 	<scm>
 		<url>https://github.com/bprager/camel-consul.git</url>
-		<developerConnection>Bernd Prager</developerConnection>
 	</scm>
+	
 </project>
