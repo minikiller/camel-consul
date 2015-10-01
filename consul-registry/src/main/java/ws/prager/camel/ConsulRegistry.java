@@ -12,6 +12,7 @@ import java.util.Set;
 import org.apache.camel.NoSuchBeanException;
 import org.apache.camel.spi.Registry;
 import org.apache.commons.lang.SerializationUtils;
+import org.apache.log4j.Logger;
 
 import com.ecwid.consul.v1.ConsulClient;
 import com.ecwid.consul.v1.Response;
@@ -19,12 +20,17 @@ import com.ecwid.consul.v1.kv.model.GetBinaryValue;
 import com.ecwid.consul.v1.session.model.NewSession;
 
 /**
- * Consul Registry Plug-in
- * (Objects stored twice; under kv/key and under kv/[type]/key
- *   to avoid iteration over types
+ * 
+ * @author Bernd Prager 
+ * Apache Camel Plug-in for Consul Registry 
+ * (Objects stored
+ *  under kv/key as well as bookmark under kv/[type]/key to avoid
+ *  iteration over types)
+ * 
  */
 public class ConsulRegistry implements Registry {
 
+	private static final Logger logger = Logger.getLogger(ConsulRegistry.class);
 	private final String hostname;
 	private final int port;
 	private ConsulClient client;
@@ -32,12 +38,13 @@ public class ConsulRegistry implements Registry {
 	private ConsulRegistry(Builder builder) {
 		this.hostname = builder.hostname;
 		this.port = builder.port;
+		logger.debug("get consul client for); " + hostname + ":" + port);
 		this.client = new ConsulClient(hostname + ":" + port);
-		// this.client = new ConsulClient(hostname);
-		}
+	}
 
 	@Override
 	public Object lookupByName(String name) {
+		logger.debug("lookup by name: " + name);
 		GetBinaryValue result = this.client.getKVBinaryValue(name).getValue();
 		if (result == null) {
 			return null;
@@ -48,6 +55,7 @@ public class ConsulRegistry implements Registry {
 
 	@Override
 	public <T> T lookupByNameAndType(String name, Class<T> type) {
+		logger.debug("lookup by name: " + name + " and type: " + type);
 		Object object = lookupByName(name);
 		if (object == null)
 			return null;
@@ -59,34 +67,39 @@ public class ConsulRegistry implements Registry {
 			throw new NoSuchBeanException(name, msg, e);
 		}
 	}
-	
+
 	@Override
 	public <T> Map<String, T> findByTypeWithName(Class<T> type) {
+		logger.debug("find by type with name: " + type);
 		Object object = null;
 		Map<String, T> result = new HashMap<String, T>();
+		// encode $ signs as they occur in subclass types
 		String keyPrefix = type.getName().replace("$", "%24");
 		Response<List<String>> response = client.getKVKeysOnly(keyPrefix);
-		if (response == null) return null;
-		for (String key: response.getValue()) {
-			object = lookup(key);
-			if (type.isInstance(object)) {
-				result.put(key, type.cast(object));
+		if (response != null && response.getValue() != null) {
+			for (String key : response.getValue()) {
+				object = lookup(key);
+				if (type.isInstance(object)) {
+					result.put(key, type.cast(object));
+				}
 			}
 		}
 		return result;
 	}
-	
+
 	@Override
 	public <T> Set<T> findByType(Class<T> type) {
+		logger.debug("find by type: " + type);
 		Object object = null;
 		Set<T> result = new HashSet<T>();
 		String keyPrefix = type.getName().replace("$", "%24");
 		Response<List<String>> response = client.getKVKeysOnly(keyPrefix);
-		if (response.getValue() == null) return null;
-		for (String key: response.getValue()) {
-			object = lookup(key.replace("$", "%24"));
-			if (type.isInstance(object)) {
-				result.add(type.cast(object));
+		if (response != null && response.getValue() != null) {
+			for (String key : response.getValue()) {
+				object = lookup(key.replace("$", "%24"));
+				if (type.isInstance(object)) {
+					result.add(type.cast(object));
+				}
 			}
 		}
 		return result;
@@ -119,8 +132,8 @@ public class ConsulRegistry implements Registry {
 		return client;
 	}
 
-	public void delete(String key) {
-		// create session to avoid conflicts
+	public void remove(String key) {
+		// create session to avoid conflicts (not sure if that is safe enough)
 		NewSession newSession = new NewSession();
 		String session = client.sessionCreate(newSession, null).getValue();
 		Object object = lookup(key);
@@ -133,12 +146,13 @@ public class ConsulRegistry implements Registry {
 		client.sessionDestroy(session, null);
 	}
 
-	public void store(String key, Object object) {
+	public void put(String key, Object object) {
+		// create session to avoid conflicts (not sure if that is safe enough, again)
 		NewSession newSession = new NewSession();
 		String session = client.sessionCreate(newSession, null).getValue();
 		// Allow only unique keys, last one wins
 		if (lookup(key) != null) {
-			delete(key);
+			remove(key);
 		}
 		Object clone = SerializationUtils.clone((Serializable) object);
 		byte[] value = SerializationUtils.serialize((Serializable) clone);
@@ -151,7 +165,6 @@ public class ConsulRegistry implements Registry {
 		// required parameter
 		String hostname;
 		// optional parameter
-		// Integer port = 53;
 		Integer port = 8500;
 
 		public Builder(String hostname) {
