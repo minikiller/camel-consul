@@ -78,6 +78,7 @@ public class ConsulRegistry implements Registry {
 		Response<List<String>> response = client.getKVKeysOnly(keyPrefix);
 		if (response != null && response.getValue() != null) {
 			for (String key : response.getValue()) {
+				// change bookmark back into actual key
 				key = key.substring((key.lastIndexOf('/') + 1 ));
 				object = lookupByName(key.replace("$", "%24"));
 				if (type.isInstance(object)) {
@@ -97,6 +98,7 @@ public class ConsulRegistry implements Registry {
 		Response<List<String>> response = client.getKVKeysOnly(keyPrefix);
 		if (response != null && response.getValue() != null) {
 			for (String key : response.getValue()) {
+				// change bookmark back into actual key
 				key = key.substring((key.lastIndexOf('/') + 1 ));
 				object = lookupByName(key.replace("$", "%24"));
 				if (type.isInstance(object)) {
@@ -146,7 +148,7 @@ public class ConsulRegistry implements Registry {
 		byte[] value = SerializationUtils.serialize((Serializable) clone);
 		// store the actual class
 		client.setKVBinaryValue(key, value);
-		// store just a bookmark
+		// store just as a bookmark
 		client.setKVValue(object.getClass().getName() + "/" + key, "1");
 		client.sessionDestroy(session, null);
 	}
