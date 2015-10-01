@@ -21,11 +21,9 @@ import com.ecwid.consul.v1.session.model.NewSession;
 
 /**
  * 
- * @author Bernd Prager 
- * Apache Camel Plug-in for Consul Registry 
- * (Objects stored
- *  under kv/key as well as bookmark under kv/[type]/key to avoid
- *  iteration over types)
+ * @author Bernd Prager Apache Camel Plug-in for Consul Registry (Objects stored
+ *         under kv/key as well as bookmark under kv/[type]/key to avoid
+ *         iteration over types)
  * 
  */
 public class ConsulRegistry implements Registry {
@@ -78,7 +76,7 @@ public class ConsulRegistry implements Registry {
 		Response<List<String>> response = client.getKVKeysOnly(keyPrefix);
 		if (response != null && response.getValue() != null) {
 			for (String key : response.getValue()) {
-				object = lookup(key);
+				object = lookupByName(key);
 				if (type.isInstance(object)) {
 					result.put(key, type.cast(object));
 				}
@@ -96,28 +94,13 @@ public class ConsulRegistry implements Registry {
 		Response<List<String>> response = client.getKVKeysOnly(keyPrefix);
 		if (response != null && response.getValue() != null) {
 			for (String key : response.getValue()) {
-				object = lookup(key.replace("$", "%24"));
+				object = lookupByName(key.replace("$", "%24"));
 				if (type.isInstance(object)) {
 					result.add(type.cast(object));
 				}
 			}
 		}
 		return result;
-	}
-
-	@Override
-	public Object lookup(String name) {
-		return lookupByName(name);
-	}
-
-	@Override
-	public <T> T lookup(String name, Class<T> type) {
-		return lookupByNameAndType(name, type);
-	}
-
-	@Override
-	public <T> Map<String, T> lookupByType(Class<T> type) {
-		return findByTypeWithName(type);
 	}
 
 	public String getHostname() {
@@ -136,7 +119,7 @@ public class ConsulRegistry implements Registry {
 		// create session to avoid conflicts (not sure if that is safe enough)
 		NewSession newSession = new NewSession();
 		String session = client.sessionCreate(newSession, null).getValue();
-		Object object = lookup(key);
+		Object object = lookupByName(key);
 		if (object == null) {
 			String msg = "Bean with key '" + key + "' did not exist in Consul Registry.";
 			throw new NoSuchBeanException(msg);
@@ -147,11 +130,12 @@ public class ConsulRegistry implements Registry {
 	}
 
 	public void put(String key, Object object) {
-		// create session to avoid conflicts (not sure if that is safe enough, again)
+		// create session to avoid conflicts (not sure if that is safe enough,
+		// again)
 		NewSession newSession = new NewSession();
 		String session = client.sessionCreate(newSession, null).getValue();
 		// Allow only unique keys, last one wins
-		if (lookup(key) != null) {
+		if (lookupByName(key) != null) {
 			remove(key);
 		}
 		Object clone = SerializationUtils.clone((Serializable) object);
@@ -179,6 +163,24 @@ public class ConsulRegistry implements Registry {
 		public ConsulRegistry build() {
 			return new ConsulRegistry(this);
 		}
+	}
+
+	@Deprecated
+	@Override
+	public Object lookup(String name) {
+		return lookupByName(name);
+	}
+
+	@Deprecated
+	@Override
+	public <T> T lookup(String name, Class<T> type) {
+		return lookupByNameAndType(name, type);
+	}
+
+	@Deprecated
+	@Override
+	public <T> Map<String, T> lookupByType(Class<T> type) {
+		return findByTypeWithName(type);
 	}
 
 }
