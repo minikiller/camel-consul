@@ -21,9 +21,11 @@ import com.ecwid.consul.v1.session.model.NewSession;
 
 /**
  * 
- * @author Bernd Prager Apache Camel Plug-in for Consul Registry (Objects stored
- *         under kv/key as well as bookmark under kv/[type]/key to avoid
- *         iteration over types)
+ * @author Bernd Prager 
+ * Apache Camel Plug-in for Consul Registry 
+ * (Objects stored under kv/key 
+ * as well as bookmarked under kv/[type]/key 
+ * to avoid iteration over types)
  * 
  */
 public class ConsulRegistry implements Registry {
@@ -76,7 +78,8 @@ public class ConsulRegistry implements Registry {
 		Response<List<String>> response = client.getKVKeysOnly(keyPrefix);
 		if (response != null && response.getValue() != null) {
 			for (String key : response.getValue()) {
-				object = lookupByName(key);
+				key = key.substring((key.lastIndexOf('/') + 1 ));
+				object = lookupByName(key.replace("$", "%24"));
 				if (type.isInstance(object)) {
 					result.put(key, type.cast(object));
 				}
@@ -94,6 +97,7 @@ public class ConsulRegistry implements Registry {
 		Response<List<String>> response = client.getKVKeysOnly(keyPrefix);
 		if (response != null && response.getValue() != null) {
 			for (String key : response.getValue()) {
+				key = key.substring((key.lastIndexOf('/') + 1 ));
 				object = lookupByName(key.replace("$", "%24"));
 				if (type.isInstance(object)) {
 					result.add(type.cast(object));
@@ -130,8 +134,8 @@ public class ConsulRegistry implements Registry {
 	}
 
 	public void put(String key, Object object) {
-		// create session to avoid conflicts (not sure if that is safe enough,
-		// again)
+		// create session to avoid conflicts 
+		// (not sure if that is safe enough, again)
 		NewSession newSession = new NewSession();
 		String session = client.sessionCreate(newSession, null).getValue();
 		// Allow only unique keys, last one wins
@@ -140,8 +144,10 @@ public class ConsulRegistry implements Registry {
 		}
 		Object clone = SerializationUtils.clone((Serializable) object);
 		byte[] value = SerializationUtils.serialize((Serializable) clone);
+		// store the actual class
 		client.setKVBinaryValue(key, value);
-		client.setKVBinaryValue(object.getClass().getName() + "/" + key, value);
+		// store just a bookmark
+		client.setKVValue(object.getClass().getName() + "/" + key, "1");
 		client.sessionDestroy(session, null);
 	}
 
