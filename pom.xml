@@ -107,7 +107,10 @@
 		</plugins>
 	</build>
 	<scm>
-		<url>https://github.com/bprager/camel-consul.git</url>
+		<url>scm:git:https://github.com/bprager/camel-consul.git</url>
+		<connection>scm:git:https://github.com/bprager/camel-consul.git</connection>
+		<developerConnection>Bernd Prager</developerConnection>
+		<tag>camel-consul</tag>
 	</scm>
-	
+
 </project>

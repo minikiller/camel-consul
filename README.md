@@ -24,5 +24,13 @@ Camel allows to plugin custom service registries, which makes it ideal for using
     // start Camel
     camelContext.start();
 
+## Using ##
+
+	<dependency>
+	  <groupId>ws.prager.camel</groupId>
+	  <artifactId>camel-consul</artifactId>
+	  <version>1.1.0</version>
+	</dependency>
+
 ## License ##
 This component is distributed under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0 "Apache License 2.0")
