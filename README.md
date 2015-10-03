@@ -9,7 +9,7 @@ Camel allows to plugin custom service registries, which makes it ideal for using
 ## Example ##
 
     // connect to Consul
-    ConsulRegistry consulRegistry = new ConsulRegistry.Builder(prop.getProperty("localhost")).build();
+    ConsulRegistry consulRegistry = new ConsulRegistry.Builder("localhost").build();
     // register our HelloBean under the name helloBean
     consulRegistry.put("helloBean", new HelloBean());
     // tell Camel to use our registry
